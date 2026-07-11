@@ -63,6 +63,7 @@
     .search-input {
         padding: 8px 10px;
         font-size: 0.88rem;
+        width: 100%;
     }
 
     .fetch-btn {
@@ -105,6 +106,11 @@
         white-space: nowrap;
         justify-content: flex-start;
         padding: 2px;
+        scrollbar-width: none;
+    }
+
+    .radio-group::-webkit-scrollbar {
+        display: none;
     }
 
     .radio-label {
@@ -112,6 +118,7 @@
         text-align: center;
         padding: 6px 8px;
         font-size: 0.72rem;
+        flex-shrink: 0;
     }
 
     .selection-stats {
