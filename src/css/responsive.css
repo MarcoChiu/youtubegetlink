@@ -1,0 +1,192 @@
+/* Responsive Design Media Queries */
+
+@media (max-width: 992px) {
+    .main-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .playlist-sidebar {
+        width: 100%;
+    }
+    
+    .sidebar-card {
+        position: relative;
+        top: 0;
+    }
+
+    .thumbnail-wrapper {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .playlist-details {
+        text-align: center;
+        align-items: center;
+    }
+
+    .original-link {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: 15px 12px;
+        gap: 15px;
+    }
+
+    .header-logo {
+        gap: 10px;
+    }
+
+    .logo-icon {
+        font-size: 26px;
+    }
+
+    .logo-titles h1 {
+        font-size: 1.3rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.75rem;
+    }
+
+    /* Search row */
+    .search-form {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .search-input {
+        padding: 8px 10px;
+        font-size: 0.88rem;
+    }
+
+    .fetch-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        font-size: 0.88rem;
+    }
+
+    /* Toolbar responsive */
+    .toolbar {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .toolbar-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .toolbar-row.top {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .search-box-wrapper {
+        width: 100%;
+    }
+
+    .format-selector {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .radio-group {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: flex-start;
+        padding: 2px;
+    }
+
+    .radio-label {
+        flex: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 0.72rem;
+    }
+
+    .selection-stats {
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .action-buttons {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .action-buttons button {
+        padding: 8px;
+        font-size: 0.78rem;
+        justify-content: center;
+    }
+
+    /* List items mobile layout */
+    .video-item {
+        padding: 6px 10px;
+        gap: 8px;
+    }
+
+    .video-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+
+    .video-index {
+        width: 20px;
+        font-size: 0.72rem;
+    }
+
+    .video-item-thumbnail {
+        width: 64px;
+        border-radius: 4px;
+    }
+
+    .video-item-title {
+        font-size: 0.8rem;
+    }
+
+    .video-meta-row {
+        font-size: 0.7rem;
+    }
+
+    .copy-single-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+    }
+
+    /* Intro list */
+    .intro-features {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .intro-card {
+        padding: 30px 16px;
+    }
+
+    .intro-icon {
+        font-size: 3rem;
+    }
+
+    .intro-card h2 {
+        font-size: 1.25rem;
+    }
+
+    .intro-card p {
+        font-size: 0.8rem;
+    }
+}

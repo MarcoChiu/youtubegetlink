@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-main: #0a0505;
+    --bg-gradient: linear-gradient(135deg, #0a0505 0%, #130a10 50%, #220509 100%);
+    --panel-bg: rgba(22, 13, 17, 0.65);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+
+    --color-primary: #ef4444;
+    --color-primary-light: #f87171;
+    --color-primary-gradient: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    --color-success: #10b981;
+    --color-success-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    --color-danger: #f87171;
+    --color-danger-gradient: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    --color-warning: #f59e0b;
+    --color-info: #38bdf8;
+
+    --item-bg: rgba(255, 255, 255, 0.03);
+    --item-hover-bg: rgba(255, 255, 255, 0.06);
+    --item-border: rgba(255, 255, 255, 0.05);
+    --item-hover-border: rgba(239, 68, 68, 0.2);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 20px rgba(239, 68, 68, 0.15);
+
+    --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+}
