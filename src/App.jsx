@@ -1,3 +1,4 @@
+/* global __BUILD_TIME__ */
 import React, { useState, useEffect } from 'react';
 import { scrapePlaylist } from './utils/youtubeScraper';
 
@@ -65,6 +66,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [toasts, setToasts] = useState([]);
+
+  // Set document title with build time
+  useEffect(() => {
+    document.title = `YouTube 播放清單連結擷取器 (${typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'Dev'} build)`;
+  }, []);
 
   // Toast notifier
   const showToast = (message, type = 'success') => {

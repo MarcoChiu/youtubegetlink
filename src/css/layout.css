@@ -1,11 +1,12 @@
 /* App Container */
 .app-container {
-    width: 1280px;
-    max-width: 100%;
+    width: 100%;
+    max-width: var(--container-width, 1280px);
     margin: 0 auto;
     padding: 30px 16px;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     gap: 25px;
     position: relative;
     z-index: 1;
