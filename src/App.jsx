@@ -255,7 +255,9 @@ function App() {
         {/* Main Header */}
         <header className="app-header">
           <div className="header-logo">
-            <div className="logo-icon">📺</div>
+            <div className="logo-icon" style={{ background: 'transparent' }}>
+              <img src="./logo.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            </div>
             <div className="logo-titles">
               <h1>YouTube Playlist Extractor</h1>
               <span className="logo-subtitle">播放清單連結與資訊擷取工具</span>
