@@ -216,3 +216,53 @@
         font-size: 0.8rem;
     }
 }
+
+@media (max-width: 480px) {
+    .app-container {
+        padding: 10px 8px;
+        gap: 12px;
+    }
+
+    .logo-titles h1 {
+        font-size: 1.2rem;
+    }
+
+    .action-buttons {
+        gap: 4px;
+    }
+
+    .action-buttons button {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .video-item {
+        padding: 6px 8px;
+        gap: 6px;
+    }
+
+    .video-item-thumbnail {
+        width: 56px;
+    }
+
+    .video-index {
+        width: 16px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .logo-titles h1 {
+        font-size: 1.1rem;
+    }
+
+    .fetch-btn span {
+        font-size: 0.85rem;
+    }
+
+    .radio-label {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+    }
+}

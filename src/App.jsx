@@ -270,7 +270,7 @@ function App() {
           <form onSubmit={handleFetchPlaylist} className="search-form">
             <input
               type="text"
-              placeholder="貼上 YouTube 播放清單網址，例如：https://www.youtube.com/playlist?list=..."
+              placeholder="貼上 YouTube 播放清單網址..."
               value={inputUrl}
               onChange={(e) => setInputUrl(e.target.value)}
               disabled={loading}
