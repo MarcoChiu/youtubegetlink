@@ -69,7 +69,7 @@ function App() {
 
   // Set document title with build time
   useEffect(() => {
-    document.title = `YouTube 播放清單連結擷取器 (${typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'Dev'} build)`;
+    document.title = `YouTube 播放清單連結擷取器`;
   }, []);
 
   // Toast notifier
@@ -507,6 +507,11 @@ function App() {
             </div>
           </section>
         )}
+
+        {/* Footer */}
+        <footer style={{ marginTop: 'auto', padding: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+          <p>Build Time: {typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'Dev'} build</p>
+        </footer>
 
         {/* Toast Toast alerts */}
         <div className="toast-container">
