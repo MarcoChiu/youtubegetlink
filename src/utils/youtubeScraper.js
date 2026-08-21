@@ -99,7 +99,7 @@ function extractVideosFromJSON(obj) {
     }
   } else if (typeof obj === 'object') {
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         videos = videos.concat(extractVideosFromJSON(obj[key]));
       }
     }

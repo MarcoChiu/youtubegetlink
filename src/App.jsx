@@ -148,7 +148,7 @@ function App() {
       case 'markdown':
         return selectedVideos.map(v => `- [${v.title}](${v.url})`).join('\n');
       
-      case 'json':
+      case 'json': {
         const exportObj = selectedVideos.map((v, i) => ({
           index: i + 1,
           title: v.title,
@@ -157,6 +157,7 @@ function App() {
           author: v.author
         }));
         return JSON.stringify(exportObj, null, 2);
+      }
       
       default:
         return '';
