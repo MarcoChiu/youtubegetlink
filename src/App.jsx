@@ -1,6 +1,7 @@
 /* global __BUILD_TIME__ */
 import React, { useState, useEffect } from 'react';
-import { scrapePlaylist } from './utils/youtubeScraper';
+import { scrapePlaylist, getCustomProxy } from './utils/youtubeScraper';
+import ProxyModal from './components/ProxyModal';
 
 // SVG Icons
 const CopyIcon = () => (
@@ -66,6 +67,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [toasts, setToasts] = useState([]);
+  const [showProxyModal, setShowProxyModal] = useState(false);
+  const [hasCustomProxy, setHasCustomProxy] = useState(Boolean(getCustomProxy()));
 
   // Set document title with build time
   useEffect(() => {
@@ -263,6 +266,19 @@ function App() {
               <h1>YouTube Playlist Extractor</h1>
               <span className="logo-subtitle">播放清單連結與資訊擷取工具</span>
             </div>
+          </div>
+          <div className="header-actions">
+            <button
+              type="button"
+              className={`header-proxy-btn ${hasCustomProxy ? 'active' : ''}`}
+              onClick={() => setShowProxyModal(true)}
+              title="配置 Cloudflare 專屬代理伺服器"
+            >
+              <span className="proxy-indicator-dot"></span>
+              <span className="proxy-btn-text">
+                {hasCustomProxy ? '專屬代理 (已啟用)' : '配置 Worker 代理'}
+              </span>
+            </button>
           </div>
         </header>
 
@@ -523,6 +539,16 @@ function App() {
             </div>
           ))}
         </div>
+
+        {/* Cloudflare Worker Proxy Modal */}
+        <ProxyModal
+          isOpen={showProxyModal}
+          onClose={() => setShowProxyModal(false)}
+          onSaved={(proxy) => {
+            setHasCustomProxy(Boolean(proxy));
+            showToast(proxy ? '⚡ 已成功啟用專屬 Cloudflare 代理！' : '已還原使用預設公共代理', 'success');
+          }}
+        />
       </div>
     </>
   );

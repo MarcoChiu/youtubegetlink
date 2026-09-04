@@ -108,6 +108,51 @@ function extractVideosFromJSON(obj) {
   return videos;
 }
 
+export const CUSTOM_PROXY_KEY = 'youtube_custom_proxy';
+
+export const getCustomProxy = () => {
+  return localStorage.getItem(CUSTOM_PROXY_KEY) || '';
+};
+
+export const setCustomProxy = (url) => {
+  if (!url || !url.trim()) {
+    localStorage.removeItem(CUSTOM_PROXY_KEY);
+  } else {
+    let clean = url.trim().replace(/\/+$/, '');
+    localStorage.setItem(CUSTOM_PROXY_KEY, clean);
+  }
+};
+
+export const testProxyConnection = async (customProxyUrl) => {
+  let target = (customProxyUrl || getCustomProxy()).trim().replace(/\/+$/, '');
+  if (!target) {
+    return { success: false, message: '請輸入有效的 Cloudflare Worker 代理網址' };
+  }
+  if (!target.startsWith('http://') && !target.startsWith('https://')) {
+    target = 'https://' + target;
+  }
+
+  // Ping test
+  const testUrl = 'https://www.google.com';
+  const proxyUrl = `${target}?url=${encodeURIComponent(testUrl)}`;
+  const startTime = performance.now();
+
+  try {
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(7000) });
+    const latency = Math.round(performance.now() - startTime);
+    if (!res.ok) {
+      return { success: false, latency, message: `伺服器回應代碼: ${res.status}` };
+    }
+    return { success: true, latency, message: `連線正常 (${latency}ms)` };
+  } catch (err) {
+    const latency = Math.round(performance.now() - startTime);
+    if (err.name === 'TimeoutError') {
+      return { success: false, latency, message: '連線逾時 (超過 7 秒)' };
+    }
+    return { success: false, latency, message: err.message || '連線失敗，請檢查網址與 CORS 白名單' };
+  }
+};
+
 // Main scrape function
 export const scrapePlaylist = async (playlistUrlOrId) => {
   const playlistId = parsePlaylistId(playlistUrlOrId);
@@ -117,10 +162,22 @@ export const scrapePlaylist = async (playlistUrlOrId) => {
 
   const targetUrl = `https://www.youtube.com/playlist?list=${playlistId}&hl=zh-TW`;
 
-  // Define proxies to try sequentially
+  // Custom Worker proxy fetcher
+  const fetchThroughCustomWorker = async (url, workerUrl) => {
+    let baseUrl = workerUrl.trim().replace(/\/+$/, '');
+    if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+      baseUrl = 'https://' + baseUrl;
+    }
+    const proxyUrl = `${baseUrl}?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(`專屬代理伺服器回應 ${res.status}`);
+    return await res.text();
+  };
+
+  // Define fallback public proxies
   const fetchThroughAllOrigins = async (url) => {
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
     if (!res.ok) throw new Error(`AllOrigins 回傳錯誤 ${res.status}`);
     const data = await res.json();
     return data.contents;
@@ -128,34 +185,50 @@ export const scrapePlaylist = async (playlistUrlOrId) => {
 
   const fetchThroughCorsProxyIo = async (url) => {
     const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
     if (!res.ok) throw new Error(`Corsproxy.io 回傳錯誤 ${res.status}`);
     return await res.text();
   };
 
   let html = null;
   let errors = [];
+  const customProxy = getCustomProxy();
 
-  // Try AllOrigins first
-  try {
-    console.log('[Scraper] Fetching via AllOrigins...');
-    html = await fetchThroughAllOrigins(targetUrl);
-  } catch (err) {
-    console.warn('[Scraper] AllOrigins failed:', err.message);
-    errors.push(`AllOrigins: ${err.message}`);
-    
-    // Try CorsProxy.io fallback
+  // 1. If custom Cloudflare Worker proxy configured, try it first
+  if (customProxy) {
+    try {
+      console.log('[Scraper] Fetching via Custom Cloudflare Worker Proxy...');
+      html = await fetchThroughCustomWorker(targetUrl, customProxy);
+    } catch (err) {
+      console.warn('[Scraper] Custom Worker failed, falling back to public proxies:', err.message);
+      errors.push(`專屬 Cloudflare 代理: ${err.message}`);
+    }
+  }
+
+  // 2. If no custom proxy or custom proxy failed, try AllOrigins
+  if (!html) {
+    try {
+      console.log('[Scraper] Fetching via AllOrigins...');
+      html = await fetchThroughAllOrigins(targetUrl);
+    } catch (err) {
+      console.warn('[Scraper] AllOrigins failed:', err.message);
+      errors.push(`AllOrigins: ${err.message}`);
+    }
+  }
+
+  // 3. Fallback to CorsProxy.io
+  if (!html) {
     try {
       console.log('[Scraper] Fetching via CorsProxy.io...');
       html = await fetchThroughCorsProxyIo(targetUrl);
-    } catch (err2) {
-      console.warn('[Scraper] CorsProxy.io failed:', err2.message);
-      errors.push(`CorsProxy.io: ${err2.message}`);
+    } catch (err) {
+      console.warn('[Scraper] CorsProxy.io failed:', err.message);
+      errors.push(`CorsProxy.io: ${err.message}`);
     }
   }
 
   if (!html) {
-    throw new Error(`無法擷取播放清單內容。已嘗試所有代理伺服器均失敗：\n${errors.join('\n')}`);
+    throw new Error(`無法擷取播放清單內容。已嘗試所有可用代理伺服器均失敗：\n${errors.join('\n')}\n建議配置專屬 Cloudflare Worker 代理以獲取最佳穩定度。`);
   }
 
   // Extract ytInitialData
